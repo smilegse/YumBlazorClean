@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using YumBlazorClean.Application.Common.Interfaces;
 using YumBlazorClean.Blazor.Components;
 using YumBlazorClean.Blazor.Components.Account;
 using YumBlazorClean.Domain.Entities;
 using YumBlazorClean.Infrastructure.Data;
+using YumBlazorClean.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,10 +26,6 @@ builder.Services.AddAuthentication(options =>
     })
     .AddIdentityCookies();
 
-//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseSqlServer(connectionString));
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -39,6 +37,10 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+
 
 var app = builder.Build();
 
