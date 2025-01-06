@@ -14,4 +14,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\YumBlazorClean.Domain\YumBlazorClean.Domain.csproj" />
+    <ProjectReference Include="..\YumBlazorClean.Infrastructure\YumBlazorClean.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

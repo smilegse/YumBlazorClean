@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using YumBlazorClean.Blazor.Components.Account.Pages;
 using YumBlazorClean.Blazor.Components.Account.Pages.Manage;
-using YumBlazorClean.Blazor.Data;
+using YumBlazorClean.Domain.Entities;
 
 namespace Microsoft.AspNetCore.Routing
 {

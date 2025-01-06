@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using YumBlazorClean.Blazor.Data;
+using YumBlazorClean.Domain.Entities;
 
 namespace YumBlazorClean.Blazor.Components.Account
 {
