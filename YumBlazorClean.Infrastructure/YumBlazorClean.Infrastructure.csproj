@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\YumBlazorClean.Application\YumBlazorClean.Application.csproj" />
-    <ProjectReference Include="..\YumBlazorClean.Domain\YumBlazorClean.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
