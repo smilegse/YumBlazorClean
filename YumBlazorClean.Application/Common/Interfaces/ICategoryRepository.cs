@@ -15,6 +15,6 @@ namespace YumBlazorClean.Application.Common.Interfaces
         public Task<Category> CreateAsync(Category obj);
         public Task<Category> UpdateAsync(Category obj);
         public Task<bool> DeleteAsync(int id);
-        Task Save();
+        Task<bool> SaveAsync();
     }
 }

@@ -23,7 +23,7 @@ namespace YumBlazorClean.Infrastructure.Repository
         public async Task<Category> CreateAsync(Category obj)
         {
             await _db.Category.AddRangeAsync(obj);
-            //await Save();
+            await SaveAsync();
             return obj;
         }
 
@@ -35,7 +35,7 @@ namespace YumBlazorClean.Infrastructure.Repository
                 return false;
             }
             _db.Category.Remove(obj);
-            return (await _db.SaveChangesAsync()) > 0;
+            return await SaveAsync();
         }
 
         public async Task<IEnumerable<Category>> GetAllAsync(Expression<Func<Category, bool>>? filter = null, string? includeProperties = null)
@@ -73,11 +73,7 @@ namespace YumBlazorClean.Infrastructure.Repository
             }
             return await query.FirstOrDefaultAsync();
         }
-
-        public async Task Save()
-        {
-            await _db.SaveChangesAsync();
-        }
+                
 
         public async Task<Category> UpdateAsync(Category obj)
         {
@@ -88,8 +84,13 @@ namespace YumBlazorClean.Infrastructure.Repository
             }
             objFromDb.Name = obj.Name;
             _db.Category.Update(objFromDb);
-            //await _db.SaveChangesAsync();
+            await SaveAsync();
             return objFromDb;
+        }
+
+        public async Task<bool> SaveAsync()
+        {
+             return await (_db.SaveChangesAsync())>0;
         }
     }
 }
