@@ -1,0 +1,6 @@
+
+Project				Dependency 
+1. UI Web Project		Infrastructure
+2. Infrastructure		Application
+3. Application			Domain
+ 
