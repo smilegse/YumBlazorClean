@@ -13,8 +13,10 @@ namespace YumBlazorClean.Infrastructure.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         { 
+
         }
 
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Category> Category { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
