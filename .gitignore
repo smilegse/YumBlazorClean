@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/YumBlazorClean.Blazor/Components/Pages/Category_Pages/CategoryList.razor
