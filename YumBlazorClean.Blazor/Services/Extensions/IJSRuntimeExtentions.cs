@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 
-namespace YumBlazorClean.Blazor.Services.Extensions
+namespace YumBlazorClean.Blazor.Services
 {
     public static class IJSRuntimeExtentions
     {

@@ -1,9 +1,10 @@
 ﻿@page "/category/create"
 @page "/category/update/{id:int}"
 
+
 @inject ICategoryRepository _categoryRepository
 @inject NavigationManager _navigationManager
-@inject IJSRuntime _jsRuntime
+@inject IJSRuntime _js
 
 @if (IsProcessing)
 {
@@ -82,14 +83,14 @@ else
             //Create
             Category.CreatedDate = DateTime.Now;
             await _categoryRepository.CreateAsync(Category);
-            //await _jsRuntime.ToasterSuccess("Category Created Successfully");
+            await _js.ToasterSuccess("Category Created Successfully");
         }
         else
         {
             //Update
             Category.UpdatedDate = DateTime.Now;
             await _categoryRepository.UpdateAsync(Category);
-            //await _jsRuntime.ToasterSuccess("Category Updated Successfully");
+            await _js.ToasterSuccess("Category Updated Successfully");
         }
         IsProcessing = false;
         _navigationManager.NavigateTo("Category");
