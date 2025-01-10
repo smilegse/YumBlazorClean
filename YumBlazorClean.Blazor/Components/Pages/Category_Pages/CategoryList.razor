@@ -1,7 +1,7 @@
 ﻿@page "/Category"
 @using YumBlazorClean.Blazor.Components.Shared
 
-@inject ICategoryRepository _categoryRepository
+@inject IUnitOfWork _unitOfWork
 @inject IJSRuntime _js
 
 <BsModal OnModalConfirmation="ConfirmDelete_Click"
@@ -96,7 +96,7 @@
     {
         // Load Categories
         //Thread.Sleep(2000);
-        Categories = await _categoryRepository.GetAllAsync();
+        Categories = await _unitOfWork.Category.GetAllAsync();
     }
 
     private void HandleDelete(int id)
@@ -112,8 +112,8 @@
         await _js.InvokeVoidAsync("HideConfirmationModal");
         if(isConfirmed && DeleteCategoryId !=0) 
         {
-            category = await _categoryRepository.GetAsync(u => u.Id == DeleteCategoryId);   
-            var IsDeleted = await _categoryRepository.RemoveAsync(category);
+            category = await _unitOfWork.Category.GetAsync(u => u.Id == DeleteCategoryId);
+            var IsDeleted = await _unitOfWork.Category.RemoveAsync(category);
             if (IsDeleted)
             {
                 _js?.ToasterSuccess("Category Deleted Successfully");

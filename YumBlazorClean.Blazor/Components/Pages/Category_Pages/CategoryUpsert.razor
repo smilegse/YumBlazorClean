@@ -1,7 +1,7 @@
 ﻿@page "/category/create"
 @page "/category/update/{id:int}"
 
-@inject ICategoryRepository _categoryRepository
+@inject IUnitOfWork _unitOfWork
 @inject NavigationManager _navigationManager
 @inject IJSRuntime _js
 
@@ -70,7 +70,7 @@ else
     {
         if (Id > 0)
         {
-            Category = await _categoryRepository.GetAsync(u=> u.Id == Id);
+            Category = await _unitOfWork.Category.GetAsync(u => u.Id == Id);
         }
     }
 
@@ -81,14 +81,14 @@ else
         {
             //Create
             Category.CreatedDate = DateTime.Now;
-            await _categoryRepository.CreateAsync(Category);
+            await _unitOfWork.Category.CreateAsync(Category);
             await _js.ToasterSuccess("Category Created Successfully");
         }
         else
         {
             //Update
             Category.UpdatedDate = DateTime.Now;
-            await _categoryRepository.UpdateAsync(Category);
+            await _unitOfWork.Category.UpdateAsync(Category);
             await _js.ToasterSuccess("Category Updated Successfully");
         }
         IsProcessing = false;
