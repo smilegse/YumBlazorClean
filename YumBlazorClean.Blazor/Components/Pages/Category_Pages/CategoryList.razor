@@ -76,7 +76,10 @@
     private bool IsProcessing { get; set; } = true;
     private int DeleteCategoryId { get; set; } = 0;
     private IEnumerable<Category> Categories { get; set; } = new List<Category>();
-
+    public Category category { get; set; } = new Category
+        {
+            Name = ""
+        };
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -109,7 +112,8 @@
         await _js.InvokeVoidAsync("HideConfirmationModal");
         if(isConfirmed && DeleteCategoryId !=0) 
         {
-            var IsDeleted = await _categoryRepository.DeleteAsync(DeleteCategoryId);
+            category = await _categoryRepository.GetAsync(u => u.Id == DeleteCategoryId);   
+            var IsDeleted = await _categoryRepository.RemoveAsync(category);
             if (IsDeleted)
             {
                 _js?.ToasterSuccess("Category Deleted Successfully");

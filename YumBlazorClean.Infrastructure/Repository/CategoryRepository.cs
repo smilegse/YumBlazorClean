@@ -11,69 +11,14 @@ using YumBlazorClean.Infrastructure.Data;
 
 namespace YumBlazorClean.Infrastructure.Repository
 {
-    public class CategoryRepository : ICategoryRepository
+    public class CategoryRepository : Repository<Category>, ICategoryRepository
     {
         private readonly ApplicationDbContext _db;
 
-        public CategoryRepository(ApplicationDbContext db)
+        public CategoryRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
-
-        public async Task<Category> CreateAsync(Category obj)
-        {
-            await _db.Category.AddRangeAsync(obj);
-            await SaveAsync();
-            return obj;
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            var obj = await _db.Category.FirstOrDefaultAsync(u => u.Id == id);
-            if (obj == null)
-            {
-                return false;
-            }
-            _db.Category.Remove(obj);
-            return await SaveAsync();
-        }
-
-        public async Task<IEnumerable<Category>> GetAllAsync(Expression<Func<Category, bool>>? filter = null, string? includeProperties = null)
-        {
-            IQueryable<Category> query = _db.Set<Category>();
-            if(filter!=null)
-            {
-                query = query.Where(filter);
-            }
-            if(!string.IsNullOrEmpty(includeProperties))
-            {
-                //Category -- case sensitive
-                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(includeProperty);
-                }
-            }
-            return await query.ToListAsync();
-        }
-
-        public async Task<Category> GetAsync(Expression<Func<Category, bool>> filter, string? includeProperties = null)
-        {
-            IQueryable<Category> query = _db.Set<Category>();
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
-            if (!string.IsNullOrEmpty(includeProperties))
-            {
-                //Category -- case sensitive
-                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(includeProperty);
-                }
-            }
-            return await query.FirstOrDefaultAsync();
-        }
-                
 
         public async Task<Category> UpdateAsync(Category obj)
         {
@@ -83,9 +28,20 @@ namespace YumBlazorClean.Infrastructure.Repository
                 return obj;
             }
             objFromDb.Name = obj.Name;
-            _db.Category.Update(objFromDb);
-            await SaveAsync();
-            return objFromDb;
+            using (var transaction = await _db.Database.BeginTransactionAsync())
+            try
+            {
+                _db.Category.Update(objFromDb);
+                await SaveAsync();
+                await transaction.CommitAsync();
+                return objFromDb;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+            
         }
 
         public async Task<bool> SaveAsync()
