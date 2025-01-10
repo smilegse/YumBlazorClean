@@ -13,7 +13,7 @@
         {
             <NavBar></NavBar>
         }
-        
+
         @Body
 
     </main>
@@ -29,14 +29,18 @@
 
     private bool _navBarVisible;
 
-    protected override async Task OnInitializedAsync()
-    {
-        _navBarVisible = await ShowNavBar();
-    }
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     _navBarVisible = await ShowNavBar();
+    // }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        _navBarVisible = await ShowNavBar();
+        if (firstRender)
+        {
+            _navBarVisible = await ShowNavBar();
+            StateHasChanged();
+        }
     }
        
 
