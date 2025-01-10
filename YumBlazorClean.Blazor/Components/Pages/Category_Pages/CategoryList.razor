@@ -1,0 +1,125 @@
+﻿@page "/Category"
+@using YumBlazorClean.Blazor.Components.Shared
+
+@inject ICategoryRepository _categoryRepository
+@inject IJSRuntime _js
+
+<BsModal OnModalConfirmation="ConfirmDelete_Click"
+         ButtonBootsrtapStyle="btn-danger"
+         ButtonText="Delete"
+         Title="Delete Confirm"
+         Body="Are you sure! you want to delete?">
+</BsModal>
+
+<div class="card shadow border-0 m-4">
+    <div class="card-header bg-success bg-gradient m-lg-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Category List</h2>
+            </div>
+        </div>
+    </div>  
+    <div class="card-body p-4">
+        <div class="row pb-3">
+            <div class="col-12 text-end">
+                <a href="category/create" class="btn btn-primary"><i class="bi bi-plus-square"></i> Add New Category</a>
+            </div>
+        </div>
+
+        @if (IsProcessing)
+        {
+            <div class="row pb-3">
+                <div class="position-absolute w-75 h-75 d-flex flex-column align-items-center bg-white justify-content-center">
+                    <img src="/images/loading.gif" alt="loading" />
+                </div>
+            </div>
+        }
+        else
+        {
+            @if (Categories.Any())
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var category in Categories)
+                        {
+                            <tr>
+                                <td>@category.Name</td>
+                                <td>
+                                    <a href="@($"category/update/{category.Id}")" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
+                                    <button @onclick="()=>HandleDelete(category.Id)" disabled="@IsProcessing" class="btn btn-danger btn-sm" ><i class="bi bi-trash3"></i> Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h4>No Categories Found</h4>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+@code {
+    private bool IsProcessing { get; set; } = true;
+    private int DeleteCategoryId { get; set; } = 0;
+    private IEnumerable<Category> Categories { get; set; } = new List<Category>();
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //await Task.Yield();
+            await LoadCategories();
+            IsProcessing = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadCategories()
+    {
+        // Load Categories
+        //Thread.Sleep(2000);
+        Categories = await _categoryRepository.GetAllAsync();
+    }
+
+    private void HandleDelete(int id)
+    {
+        // Delete Category
+        DeleteCategoryId = id;
+        _js.InvokeVoidAsync("ShowConfirmationModal");
+    }
+
+    private async Task ConfirmDelete_Click(bool isConfirmed)
+    {
+        IsProcessing = true;
+        await _js.InvokeVoidAsync("HideConfirmationModal");
+        if(isConfirmed && DeleteCategoryId !=0) 
+        {
+            var IsDeleted = await _categoryRepository.DeleteAsync(DeleteCategoryId);
+            if (IsDeleted)
+            {
+                _js?.ToasterSuccess("Category Deleted Successfully");
+                await LoadCategories();                
+            }
+            else
+                _js?.ToasterSuccess("Error Encountered While Deleting");
+        }
+        DeleteCategoryId = 0;
+        IsProcessing = false;
+    }
+
+}
