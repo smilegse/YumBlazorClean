@@ -9,5 +9,6 @@ namespace YumBlazorClean.Application.Common.Interfaces
     public interface IUnitOfWork
     {
         ICategoryRepository Category { get; }
+        IProductRepository Product { get; }
     }
 }

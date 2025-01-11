@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace YumBalzorClean.Domain.Entities
+namespace YumBlazorClean.Domain.Entities
 {
     public class OrderDetail
     {

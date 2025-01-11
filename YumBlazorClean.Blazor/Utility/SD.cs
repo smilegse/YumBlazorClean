@@ -1,5 +1,5 @@
 ﻿using System.Collections.Specialized;
-using YumBalzorClean.Domain.Entities;
+using YumBlazorClean.Domain.Entities;
 
 namespace YumBalzorClean.Blazor.Utility
 {

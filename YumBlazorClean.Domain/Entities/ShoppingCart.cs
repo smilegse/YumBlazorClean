@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using YumBlazorClean.Domain.Entities;
 
-namespace YumBalzorClean.Domain.Entities
+namespace YumBlazorClean.Domain.Entities
 {
     public class ShoppingCart
     {
