@@ -16,6 +16,9 @@ namespace YumBalzorClean.Domain.Entities
 
         public int Count { get; set; }
 
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+
 
     }
 }

@@ -36,5 +36,8 @@ namespace YumBalzorClean.Domain.Entities
 
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+
     }
 }

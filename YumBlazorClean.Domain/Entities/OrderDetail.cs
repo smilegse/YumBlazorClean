@@ -15,5 +15,8 @@ namespace YumBalzorClean.Domain.Entities
         public double Price { get; set; }
         [Required]
         public string ProductName { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 }

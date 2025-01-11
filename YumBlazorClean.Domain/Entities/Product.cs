@@ -20,5 +20,8 @@ namespace YumBalzorClean.Domain.Entities
         public Category Category { get; set; }
         public string? ImageUrl { get; set; }
         //public DateOnly AvailableAfter { get; set; }
+
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 }
