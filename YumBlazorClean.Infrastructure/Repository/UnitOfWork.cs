@@ -19,5 +19,10 @@ namespace YumBlazorClean.Infrastructure.Repository
             Category = new CategoryRepository(_db);
             Product = new ProductRepository(_db);
         }
+
+        public async Task<bool> SaveAsync()
+        {
+            return await (_db.SaveChangesAsync()) > 0;
+        }
     }
 }

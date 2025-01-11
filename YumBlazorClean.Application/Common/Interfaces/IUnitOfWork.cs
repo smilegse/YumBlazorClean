@@ -10,5 +10,7 @@ namespace YumBlazorClean.Application.Common.Interfaces
     {
         ICategoryRepository Category { get; }
         IProductRepository Product { get; }
+
+        Task<bool> SaveAsync();
     }
 }

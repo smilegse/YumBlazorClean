@@ -11,6 +11,6 @@ namespace YumBlazorClean.Application.Common.Interfaces
     public interface ICategoryRepository : IRepository<Category>
     {
         Task<Category> UpdateAsync(Category obj);
-        Task<bool> SaveAsync();
+        
     }
 }

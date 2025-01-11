@@ -82,6 +82,7 @@ else
             //Create
             Category.CreatedDate = DateTime.Now;
             await _unitOfWork.Category.CreateAsync(Category);
+            await _unitOfWork.SaveAsync();
             await _js.ToasterSuccess("Category Created Successfully");
         }
         else
@@ -89,6 +90,7 @@ else
             //Update
             Category.UpdatedDate = DateTime.Now;
             await _unitOfWork.Category.UpdateAsync(Category);
+            await _unitOfWork.SaveAsync();
             await _js.ToasterSuccess("Category Updated Successfully");
         }
         IsProcessing = false;

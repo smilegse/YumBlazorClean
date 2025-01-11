@@ -11,6 +11,6 @@ namespace YumBlazorClean.Application.Common.Interfaces
     public interface IProductRepository : IRepository<Product>
     {
         Task<Product> UpdateAsync(Product obj);
-        Task<bool> SaveAsync();
+        //Task<bool> SaveAsync();
     }
 }

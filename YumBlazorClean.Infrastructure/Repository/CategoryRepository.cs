@@ -20,33 +20,38 @@ namespace YumBlazorClean.Infrastructure.Repository
             _db = db;
         }
 
-        public async Task<Category> UpdateAsync(Category obj)
+        public async Task<Category> UpdateAsync(Category entity)
         {
-            var objFromDb = await _db.Category.FirstOrDefaultAsync(u => u.Id == obj.Id);
-            if (objFromDb == null)
-            {
-                return obj;
-            }
-            objFromDb.Name = obj.Name;
-            using (var transaction = await _db.Database.BeginTransactionAsync())
-            try
-            {
-                _db.Category.Update(objFromDb);
-                await SaveAsync();
-                await transaction.CommitAsync();
-                return objFromDb;
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-            
+            _db.Category.Update(entity);
+            return entity;
         }
 
-        public async Task<bool> SaveAsync()
-        {
-             return await (_db.SaveChangesAsync())>0;
-        }
+        //public async Task<Category> UpdateAsync(Category obj)
+        //{
+        //    var objFromDb = await _db.Category.FirstOrDefaultAsync(u => u.Id == obj.Id);
+        //    if (objFromDb == null)
+        //    {
+        //        return obj;
+        //    }
+        //    objFromDb.Name = obj.Name;
+        //    using (var transaction = await _db.Database.BeginTransactionAsync())
+        //    try
+        //    {
+        //        _db.Category.Update(objFromDb);
+        //        await SaveAsync();
+        //        await transaction.CommitAsync();
+        //        return objFromDb;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        await transaction.RollbackAsync();
+        //        throw;
+        //    }            
+        //}
+
+
+
+
+
     }
 }

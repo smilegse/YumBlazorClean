@@ -19,34 +19,38 @@ namespace YumBlazorClean.Infrastructure.Repository
         {
             _db = db;
         }
-
-        public async Task<Product> UpdateAsync(Product obj)
+        public async Task<Product> UpdateAsync(Product entity)
         {
-            var objFromDb = await _db.Product.FirstOrDefaultAsync(u => u.Id == obj.Id);
-            if (objFromDb == null)
-            {
-                return obj;
-            }
-            objFromDb.Name = obj.Name;
-            using (var transaction = await _db.Database.BeginTransactionAsync())
-            try
-            {
-                _db.Product.Update(objFromDb);
-                await SaveAsync();
-                await transaction.CommitAsync();
-                return objFromDb;
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-            
+            _db.Product.Update(entity);
+            return entity;
         }
 
-        public async Task<bool> SaveAsync()
-        {
-             return await (_db.SaveChangesAsync())>0;
-        }
+        //public async Task<Product> UpdateAsync(Product obj)
+        //{
+        //    var objFromDb = await _db.Product.FirstOrDefaultAsync(u => u.Id == obj.Id);
+        //    if (objFromDb == null)
+        //    {
+        //        return obj;
+        //    }
+        //    objFromDb.Name = obj.Name;
+        //    using (var transaction = await _db.Database.BeginTransactionAsync())
+        //    try
+        //    {
+        //        _db.Product.Update(objFromDb);
+        //        //await SaveAsync();
+        //        await transaction.CommitAsync();
+        //        return objFromDb;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        await transaction.RollbackAsync();
+        //        throw;
+        //    }            
+        //}
+
+        //public async Task<bool> SaveAsync()
+        //{
+        //     return await (_db.SaveChangesAsync())>0;
+        //}
     }
 }
