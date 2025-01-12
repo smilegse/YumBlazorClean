@@ -9,11 +9,10 @@ using YumBlazorClean.Domain.Entities;
 
 namespace YumBlazorClean.Infrastructure.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         { 
-
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }

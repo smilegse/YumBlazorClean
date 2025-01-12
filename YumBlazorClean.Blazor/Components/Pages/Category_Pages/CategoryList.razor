@@ -113,7 +113,7 @@
         if(isConfirmed && DeleteCategoryId !=0) 
         {
             category = await _unitOfWork.Category.GetAsync(u => u.Id == DeleteCategoryId);
-            var IsDeleted = await _unitOfWork.Category.RemoveAsync(category);
+            var IsDeleted = await _unitOfWork.Category. RemoveAsync(category);
             if (IsDeleted)
             {
                 _js?.ToasterSuccess("Category Deleted Successfully");

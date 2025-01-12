@@ -1,0 +1,142 @@
+﻿@page "/Product"
+
+
+@inject IUnitOfWork _unitOfWork
+@inject IJSRuntime _js
+
+<BsModal OnModalConfirmation="ConfirmDelete_Click"
+         ButtonBootsrtapStyle="btn-danger"
+         ButtonText="Delete"
+         Title="Delete Confirm"
+         Body="Are you sure! you want to delete?">
+</BsModal>
+
+
+@if (IsProcessing)
+{
+    <div class="row pb-3">
+        <div class="position-absolute w-75 h-75 d-flex flex-column align-items-center bg-white justify-content-center">
+            <img src="/images/loading.gif" alt="loading" />
+        </div>
+    </div>
+}
+else
+{
+    <div class="card shadow border-0 m-4">
+        <div class="card-header bg-success bg-gradient m-lg-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="text-white py-2">Product List</h2>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <div class="row pb-3">
+                <div class="col-12 text-end">
+                    <a href="product/create" class="btn btn-primary"><i class="bi bi-plus-square"></i> Add New product</a>
+                </div>
+            </div>
+
+
+            @if (Product.Any())
+            {
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Special Tag</th>
+                            <th>Thumbnail</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Product)
+                        {
+                            <tr>
+                                <td>@product.Name</td>
+                                <td>@((MarkupString)@product.Description)</td>
+                                <td>$@product.Price</td>
+                                <td>@product.Category.Name</td>
+                                <td><span class="badge bg-info">@product.SpecialTag</span></td>
+                                <td><img src="@product.ImageUrl" class="img-thumbnail" style="width: 80px;" /> </td>
+                                <td>
+                                    <a href="@($"product/update/{product.Id}")" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <button @onclick="()=>HandleDelete(product.Id)" disabled="@IsProcessing" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash3"></i> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h4>No Product Found</h4>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+}
+
+@code {
+    private bool IsProcessing { get; set; } = true;
+    private int DeleteProductId { get; set; } = 0;
+    private IEnumerable<Product> Product { get; set; } = new List<Product>();
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //await Task.Yield();
+            await LoadProducts();
+            IsProcessing = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task LoadProducts()
+    {
+        // Load Product
+        //Thread.Sleep(2000);
+        Product = await _unitOfWork.Product.GetAllAsync();
+    }
+
+    private void HandleDelete(int id)
+    {
+        // Delete product
+        DeleteProductId = id;
+        _js.InvokeVoidAsync("ShowConfirmationModal");
+    }
+
+    private async Task ConfirmDelete_Click(bool isConfirmed)
+    {
+        IsProcessing = true;
+        await _js.InvokeVoidAsync("HideConfirmationModal");
+        if (isConfirmed && DeleteProductId != 0)
+        {
+            var product = await _unitOfWork.Product.GetAsync(u => u.Id == DeleteProductId);
+            var IsDeleted = await _unitOfWork.Product.RemoveAsync(product);
+            if (IsDeleted)
+            {
+                _js?.ToasterSuccess("Product Deleted Successfully");
+                await LoadProducts();
+            }
+            else
+                _js?.ToasterSuccess("Error Encountered While Deleting");
+        }
+        DeleteProductId = 0;
+        IsProcessing = false;
+    }
+
+}
