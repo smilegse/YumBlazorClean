@@ -13,6 +13,7 @@ namespace YumBlazorClean.Application.Common.Interfaces
 
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null);
         Task<T> GetAsync(Expression<Func<T, bool>> filter, bool tracked = true, string? includeProperties = null);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> filter);
         Task<T> CreateAsync(T entity);
         Task<bool> RemoveAsync(T entity);
         Task<bool> SaveAsync();
